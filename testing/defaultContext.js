@@ -1,3 +1,4 @@
 module.exports = {
-  log: jest.fn()
+  log: jest.fn(),
+  info: jest.fn()
 };

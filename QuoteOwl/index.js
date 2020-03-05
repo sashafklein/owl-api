@@ -32,10 +32,9 @@ export const html = quote => {
 };
 
 module.exports = async function(context, myTimer, fetch = nodeFetch) {
-  var timeStamp = new Date().toISOString();
-
   return new Promise((resolve, reject) => {
     const { AIRTABLE_API_KEY, AIRTABLE_APP_ID } = process.env;
+    context.info("FUNCTION CALLED. VARS", Object.keys(process.env));
     const key = `?api_key=${AIRTABLE_API_KEY}`;
     const base = `https://api.airtable.com/v0/${AIRTABLE_APP_ID}/Quotes`;
 
@@ -72,6 +71,7 @@ module.exports = async function(context, myTimer, fetch = nodeFetch) {
                 if (json.error) {
                   reject(json.error);
                 } else {
+                  console.info("REACHED EMAIL", next);
                   resolve(json);
                 }
               })
