@@ -6,7 +6,7 @@ require("dotenv").config();
 module.exports = async function(context, myTimer, axios = axiosLib) {
   return new Promise((resolve, reject) => {
     const { AIRTABLE_API_KEY, AIRTABLE_APP_ID, RECIPIENTS } = process.env;
-    context.log("FUNCTION CALLED. VARS", Object.keys(process.env));
+    context.log("TIMER", myTimer);
     const key = `?api_key=${AIRTABLE_API_KEY}`;
     const base = `https://api.airtable.com/v0/${AIRTABLE_APP_ID}/Quotes`;
 
