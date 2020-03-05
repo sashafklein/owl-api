@@ -23,7 +23,7 @@ const html = quote => {
         )}
       </div>
     </div>
-  `;
+  `.trim();
   return content;
 };
 

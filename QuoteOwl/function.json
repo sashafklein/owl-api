@@ -5,6 +5,13 @@
       "type": "timerTrigger",
       "direction": "in",
       "schedule": "0 30 6 * * *"
+    },
+    {
+      "name": "$return",
+      "type": "sendGrid",
+      "direction": "out",
+      "apiKey": "SENDGRID_API_KEY",
+      "from": "Quote Owl <quote.owl@gmail.com>"
     }
   ]
 }

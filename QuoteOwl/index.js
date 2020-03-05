@@ -5,7 +5,7 @@ require("dotenv").config();
 
 module.exports = async function(context, myTimer, axios = axiosLib) {
   return new Promise((resolve, reject) => {
-    const { AIRTABLE_API_KEY, AIRTABLE_APP_ID } = process.env;
+    const { AIRTABLE_API_KEY, AIRTABLE_APP_ID, RECIPIENTS } = process.env;
     context.info("FUNCTION CALLED. VARS", Object.keys(process.env));
     const key = `?api_key=${AIRTABLE_API_KEY}`;
     const base = `https://api.airtable.com/v0/${AIRTABLE_APP_ID}/Quotes`;
@@ -25,7 +25,7 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
           .get(`${base}${key}&${queryString}`)
           .then(json => {
             const next = json.records[0];
-            context.log("NEXT: ", next);
+            context.log("NEXT: ", next, next.fields);
 
             axios
               .patch(`${base}/${next.id}${key}`, {
@@ -35,9 +35,29 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
                   ).toString()
                 }
               })
-              .then(json => {
-                console.info("REACHED EMAIL", next);
-                resolve(json);
+              .then(() => {
+                const quote = next.fields;
+                const { author, body } = quote;
+                const bodySubject = body.length < 100;
+                const subject = bodySubject ? body.replace(/\*/g, "") : author;
+                const fromEmail = "Quote Owl <quote.owl@gmail.com>";
+                const from = bodySubject
+                  ? `${author.replace(/[\,'."\(\*\)#]/g, "")} - ${fromEmail}`
+                  : fromEmail;
+                const message = {
+                  personalizations: [
+                    { to: RECIPIENTS.split(",").map(email => ({ email })) }
+                  ],
+                  from: from,
+                  subject,
+                  content: [
+                    {
+                      type: "text/html",
+                      value: html(quote)
+                    }
+                  ]
+                };
+                resolve(message);
               })
               .catch(err => {
                 reject(err);
@@ -50,7 +70,7 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
         reject(err);
       }
     } else {
-      resolve(true);
+      resolve({});
     }
   });
 };
