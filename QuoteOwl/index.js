@@ -6,7 +6,7 @@ require("dotenv").config();
 module.exports = async function(context, myTimer, axios = axiosLib) {
   return new Promise((resolve, reject) => {
     const { AIRTABLE_API_KEY, AIRTABLE_APP_ID, RECIPIENTS } = process.env;
-    context.info("FUNCTION CALLED. VARS", Object.keys(process.env));
+    context.log("FUNCTION CALLED. VARS", Object.keys(process.env));
     const key = `?api_key=${AIRTABLE_API_KEY}`;
     const base = `https://api.airtable.com/v0/${AIRTABLE_APP_ID}/Quotes`;
 
@@ -20,6 +20,7 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
       .join("&");
 
     if (myTimer.isPastDue) {
+      context.log("PAST DUE");
       try {
         axios
           .get(`${base}${key}&${queryString}`)
@@ -57,6 +58,7 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
                     }
                   ]
                 };
+                context.log("SENDING", message);
                 resolve(message);
               })
               .catch(err => {
@@ -70,6 +72,7 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
         reject(err);
       }
     } else {
+      context.log("NOT DUE");
       resolve({});
     }
   });
