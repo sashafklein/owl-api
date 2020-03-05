@@ -4,12 +4,13 @@
   "description": "",
   "scripts": {
     "start": "func start",
-    "test": "jest"
+    "test": "jest",
+    "t": "jest --watch"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "dotenv": "^8.2.0",
-    "jest": "^25.1.0",
-    "node-fetch": "^2.6.0"
+    "jest": "^25.1.0"
   },
   "devDependencies": {}
 }
