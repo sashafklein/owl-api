@@ -73,7 +73,7 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
       }
     } else {
       context.log("NOT DUE");
-      resolve({});
+      reject(null);
     }
   });
 };
