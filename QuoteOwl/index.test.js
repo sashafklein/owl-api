@@ -27,7 +27,7 @@ const fields = {
 };
 
 describe("Quote owl endpoint", () => {
-  it("Timer trigger should log message", done => {
+  it("Timer trigger should fetch data, update item, and send message", done => {
     const log = context.log.mock;
     const axios = {
       get: promiseMock({
@@ -36,7 +36,7 @@ describe("Quote owl endpoint", () => {
       patch: promiseMock({ success: true })
     };
 
-    timerFunction(context, { isPastDue: true }, axios)
+    timerFunction(context, {}, axios)
       .then(resp => {
         expect(axios.get.mock.calls.length).toEqual(1);
         expect(axios.get.mock.calls[0]).toEqual([

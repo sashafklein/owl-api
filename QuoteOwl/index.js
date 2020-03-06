@@ -19,61 +19,58 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
       .reduce((arr, key) => [...arr, `${key}=${params[key]}`], [])
       .join("&");
 
-    if (myTimer.isPastDue) {
-      context.log("PAST DUE");
-      try {
-        axios
-          .get(`${base}${key}&${queryString}`)
-          .then(json => {
-            const next = json.records[0];
-            context.log("NEXT: ", next, next.fields);
+    try {
+      axios
+        .get(`${base}${key}&${queryString}`)
+        .then(json => {
+          const next = json.records[0];
+          context.log("NEXT: ", next, next.fields);
 
-            axios
-              .patch(`${base}/${next.id}${key}`, {
-                fields: {
-                  times_sent: (
-                    parseInt(next.fields.times_sent, 10) + 1
-                  ).toString()
-                }
-              })
-              .then(() => {
-                const quote = next.fields;
-                const { author, body } = quote;
-                const bodySubject = body.length < 100;
-                const subject = bodySubject ? body.replace(/\*/g, "") : author;
-                const fromEmail = "Quote Owl <quote.owl@gmail.com>";
-                const from = bodySubject
-                  ? `${author.replace(/[\,'."\(\*\)#]/g, "")} - ${fromEmail}`
-                  : fromEmail;
-                const message = {
-                  personalizations: [
-                    { to: RECIPIENTS.split(",").map(email => ({ email })) }
-                  ],
-                  from: from,
-                  subject,
-                  content: [
-                    {
-                      type: "text/html",
-                      value: html(quote)
-                    }
-                  ]
-                };
-                context.log("SENDING", message);
-                resolve(message);
-              })
-              .catch(err => {
-                reject(err);
-              });
-          })
-          .catch(err => {
-            reject(err);
-          });
-      } catch (err) {
-        reject(err);
-      }
-    } else {
-      context.log("NOT DUE");
-      reject(null);
+          axios
+            .patch(`${base}/${next.id}${key}`, {
+              fields: {
+                times_sent: (
+                  parseInt(next.fields.times_sent, 10) + 1
+                ).toString()
+              }
+            })
+            .then(() => {
+              const quote = next.fields;
+              const { author, body } = quote;
+              const bodySubject = body.length < 100;
+              const subject = bodySubject ? body.replace(/\*/g, "") : author;
+              const fromEmail = "Quote Owl <quote.owl@gmail.com>";
+              const from = bodySubject
+                ? `${author.replace(/[\,'."\(\*\)#]/g, "")} - ${fromEmail}`
+                : fromEmail;
+              const message = {
+                personalizations: [
+                  { to: RECIPIENTS.split(",").map(email => ({ email })) }
+                ],
+                from: from,
+                subject,
+                content: [
+                  {
+                    type: "text/html",
+                    value: html(quote)
+                  }
+                ]
+              };
+              context.log("SENDING", message);
+              resolve(message);
+            })
+            .catch(err => {
+              context.log("FAILED PATCH");
+              reject(err);
+            });
+        })
+        .catch(err => {
+          context.log("FAILED GET");
+          reject(err);
+        });
+    } catch (err) {
+      context.log("IN GLOBAL CATCH");
+      reject(err);
     }
   });
 };
