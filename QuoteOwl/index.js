@@ -25,13 +25,20 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
     try {
       axios
         .get(getUrl)
-        .then(json => {
-          log("JSON: ", json);
-          const next = json.records[0];
+        .then(({ data }) => {
+          log("DATA: ", data);
+          const next = data.records[0];
           log("NEXT: ", next, next.fields);
 
+          const timesSent =
+            parseInt(
+              next.fields.times_sent ||
+                data.records.find(r => r.fields.times_sent).fields.times_sent,
+              10
+            ) + 1;
+
           const fields = {
-            times_sent: (parseInt(next.fields.times_sent, 10) + 1).toString()
+            times_sent: timesSent
           };
           axios
             .patch(`${base}/${next.id}${key}`, { fields })
