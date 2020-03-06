@@ -19,22 +19,23 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
       .reduce((arr, key) => [...arr, `${key}=${params[key]}`], [])
       .join("&");
 
+    const getUrl = `${base}${key}&${queryString}`;
+    context.log("GET URL", getUrl);
     try {
       axios
-        .get(`${base}${key}&${queryString}`)
+        .get(getUrl)
         .then(json => {
+          context.log("JSON: ", json);
           const next = json.records[0];
           context.log("NEXT: ", next, next.fields);
 
+          const fields = {
+            times_sent: (parseInt(next.fields.times_sent, 10) + 1).toString()
+          };
           axios
-            .patch(`${base}/${next.id}${key}`, {
-              fields: {
-                times_sent: (
-                  parseInt(next.fields.times_sent, 10) + 1
-                ).toString()
-              }
-            })
-            .then(() => {
+            .patch(`${base}/${next.id}${key}`, { fields })
+            .then(r => {
+              console.log("PATCH: ", r);
               const quote = next.fields;
               const { author, body } = quote;
               const bodySubject = body.length < 100;
