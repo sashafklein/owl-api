@@ -9,15 +9,15 @@ const makeBold = text => {
 const html = quote => {
   const body = makeBold(quote.body);
   const content = `
-    <div style='background: #F7F7F7; color: black; padding: 20px 8px; font-family: "Montserrat", "Gotham Light", helvetica'>
-      <div style='margin: auto; max-width: 800px'>
-        <h2 style='font-size: 24px; text-align: center; font-weight: normal; font-family: "Montserrat", "Gotham Light", helvetica; margin-bottom: 30px;'>
+    <div style='background: #F7F7F7; color: black; padding: 30px 8px; font-family: "Montserrat", "Gotham Light", helvetica'>
+      <div style='margin: auto; max-width: 700px'>
+        <h2 style='font-size: 24px; text-align: center; font-weight: 600; font-family: "Montserrat", "Gotham Light", helvetica; margin-bottom: 30px;'>
           ${quote.author}
         </h2>
-        <div style='padding: 0 40px'>
+        <div>
           ${body.split("\r\n").map(
             line =>
-              `<p style='text-align: center; line-height: 1.9; padding: 0 40; font-size: 17px; font-weight: normal; font-family: "Montserrat", "Gotham Light", helvetica'>
+              `<p style='text-align: center; line-height: 1.9; font-size: 17px; font-weight: normal; font-family: "Montserrat", "Gotham Light", helvetica'>
                 ${line}
                 </br>
               </p>`
