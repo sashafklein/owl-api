@@ -53,9 +53,12 @@ describe("Quote owl endpoint", () => {
         const { personalizations, from, subject, content } = resp;
 
         expect(personalizations).toEqual([
-          { to: [{ email: "Sasha Klein <sashafklein@gmail.com>" }] }
+          { to: [{ email: "sashafklein@gmail.com", name: "Sasha Klein" }] }
         ]);
-        expect(from).toEqual("Thomas Sowell - Quote Owl <quote.owl@gmail.com>");
+        expect(from).toEqual({
+          name: "Thomas Sowell - Quote Owl",
+          email: "quote.owl@gmail.com>"
+        });
         expect(subject).toEqual(
           "The most basic question is not what is best, but who shall decide what is best."
         );
@@ -69,7 +72,7 @@ describe("Quote owl endpoint", () => {
       .catch(err => {
         console.log("CALLS", log.calls);
         console.log("ERR: ", err);
-        done();
+        throw err;
       });
   });
 
