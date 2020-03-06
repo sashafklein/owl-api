@@ -4,9 +4,10 @@ const { html } = require("./helpers");
 require("dotenv").config();
 
 module.exports = async function(context, myTimer, axios = axiosLib) {
+  const { log } = context;
   return new Promise((resolve, reject) => {
     const { AIRTABLE_API_KEY, AIRTABLE_APP_ID, RECIPIENTS } = process.env;
-    context.log("TIMER", myTimer);
+    log("TIMER", myTimer);
     const key = `?api_key=${AIRTABLE_API_KEY}`;
     const base = `https://api.airtable.com/v0/${AIRTABLE_APP_ID}/Quotes`;
 
@@ -20,14 +21,14 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
       .join("&");
 
     const getUrl = `${base}${key}&${queryString}`;
-    context.log("GET URL", getUrl);
+    log("GET URL", getUrl);
     try {
       axios
         .get(getUrl)
         .then(json => {
-          context.log("JSON: ", json);
+          log("JSON: ", json);
           const next = json.records[0];
-          context.log("NEXT: ", next, next.fields);
+          log("NEXT: ", next, next.fields);
 
           const fields = {
             times_sent: (parseInt(next.fields.times_sent, 10) + 1).toString()
@@ -35,7 +36,7 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
           axios
             .patch(`${base}/${next.id}${key}`, { fields })
             .then(r => {
-              console.log("PATCH: ", r);
+              log("PATCH: ", r);
               const quote = next.fields;
               const { author, body } = quote;
               const bodySubject = body.length < 100;
@@ -57,11 +58,11 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
                   }
                 ]
               };
-              context.log("SENDING", message);
+              log("SENDING", message);
               resolve(message);
             })
             .catch(err => {
-              context.log("FAILED PATCH");
+              log("FAILED PATCH");
               reject(err);
             });
         })
