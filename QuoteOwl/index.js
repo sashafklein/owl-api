@@ -51,15 +51,21 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
               const { author, body } = quote;
               const bodySubject = body.length < 100;
               const subject = bodySubject ? body.replace(/\*/g, "") : author;
-              const fromEmail = "Quote Owl <quote.owl@gmail.com>";
               const from = bodySubject
-                ? `${author.replace(/[\,'."\(\*\)#]/g, "")} - ${fromEmail}`
-                : fromEmail;
+                ? `${author.replace(/[\,'."\(\*\)#]/g, "")} - Quote Owl`
+                : "Quote Owl";
+              const to = RECIPIENTS.split(",").map(nameEmail => {
+                const [name, email] = nameEmail.split("|");
+                return { email, name };
+              });
+              log("TO", to);
+
               const message = {
-                personalizations: [
-                  { to: RECIPIENTS.split(",").map(email => ({ email })) }
-                ],
-                from: from,
+                personalizations: [{ to }],
+                from: {
+                  email: "quote.owl@gmail.com",
+                  name: from
+                },
                 subject,
                 content: [
                   {
