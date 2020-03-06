@@ -31,7 +31,9 @@ describe("Quote owl endpoint", () => {
     const log = context.log.mock;
     const axios = {
       get: promiseMock({
-        records: [{ id: "12345", fields: { ...fields, times_sent: 5 } }]
+        data: {
+          records: [{ id: "12345", fields: { ...fields, times_sent: 5 } }]
+        }
       }),
       patch: promiseMock({ success: true })
     };

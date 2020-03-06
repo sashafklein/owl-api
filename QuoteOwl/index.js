@@ -37,13 +37,16 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
               10
             ) + 1;
 
+          const patchUrl = `${base}/${next.id}${key}`;
           const fields = {
-            times_sent: timesSent
+            times_sent: timesSent.toString()
           };
+          log("FIELDS", fields);
+          log("PATCH URL", patchUrl);
           axios
-            .patch(`${base}/${next.id}${key}`, { fields })
+            .patch(patchUrl, { fields })
             .then(r => {
-              log("PATCH: ", r);
+              log("PATCH: ", r.data);
               const quote = next.fields;
               const { author, body } = quote;
               const bodySubject = body.length < 100;
@@ -69,12 +72,12 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
               resolve(message);
             })
             .catch(err => {
-              log("FAILED PATCH");
+              log("FAILED PATCH", err);
               reject(err);
             });
         })
         .catch(err => {
-          context.log("FAILED GET");
+          context.log("FAILED GET", err);
           reject(err);
         });
     } catch (err) {
