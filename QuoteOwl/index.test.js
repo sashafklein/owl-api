@@ -7,17 +7,16 @@ const promiseMock = resolvesTo =>
   jest.fn().mockReturnValue(Promise.resolve(resolvesTo));
 
 const htmlExpectation = `
-    <div style='background: #F7F7F7; color: black; padding: 30px 8px; font-family: \"Montserrat\", "Gotham Light", helvetica'>
+    <div style='background: #F7F7F7; color: black; padding: 30px 8px; font-family: "Montserrat", "Gotham Light", helvetica'>
       <div style='margin: auto; max-width: 700px'>
-        <h2 style='font-size: 24px; text-align: center; font-weight: 600; font-family: \"Montserrat\", "Gotham Light", helvetica; margin-bottom: 30px;'>
-          Thomas Sowell
-        </h2>
-        <div>
-          <p style='text-align: center; line-height: 1.9; font-size: 17px; font-weight: normal; font-family: \"Montserrat\", "Gotham Light", helvetica'>
-                The most basic question is not what is best, but <strong>who shall decide</strong> what is best.
-                </br>
-              </p>
-        </div>
+        <p style='text-align: center; line-height: 1.6; font-size: 26px; font-weight: 500; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic;'>
+            The most basic question is not what is best, but <strong>who shall decide</strong> what is best.
+          </p>
+      </div>
+      <div>
+        <p style='font-size: 22px; text-align: center; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; margin-bottom: 30px; margin-top: -4px;'>
+          - Thomas Sowell
+        </p>
       </div>
     </div>`;
 
@@ -64,6 +63,7 @@ describe("Quote owl endpoint", () => {
         expect(subject).toEqual(
           "The most basic question is not what is best, but who shall decide what is best."
         );
+        console.log(content[0].value);
         expect(content[0]).toEqual({
           type: "text/html",
           value: htmlExpectation.trim()

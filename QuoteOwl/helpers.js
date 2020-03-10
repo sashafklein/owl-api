@@ -11,18 +11,19 @@ const html = quote => {
   const content = `
     <div style='background: #F7F7F7; color: black; padding: 30px 8px; font-family: "Montserrat", "Gotham Light", helvetica'>
       <div style='margin: auto; max-width: 700px'>
-        <h2 style='font-size: 24px; text-align: center; font-weight: 600; font-family: "Montserrat", "Gotham Light", helvetica; margin-bottom: 30px;'>
-          ${quote.author}
-        </h2>
-        <div>
-          ${body.split("\r\n").map(
-            line =>
-              `<p style='text-align: center; line-height: 1.9; font-size: 17px; font-weight: normal; font-family: "Montserrat", "Gotham Light", helvetica'>
-                ${line}
-                </br>
-              </p>`
-          )}
-        </div>
+        ${body.split("\r\n").map(
+          (line, i) =>
+            `<p style='text-align: center; line-height: 1.6; font-size: 26px; font-weight: 500; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic;${
+              i === 0 ? "" : " margin-top: -15px;"
+            }'>
+            ${line}
+          </p>`
+        )}
+      </div>
+      <div>
+        <p style='font-size: 22px; text-align: center; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; margin-bottom: 30px; margin-top: -4px;'>
+          - ${quote.author}
+        </p>
       </div>
     </div>
   `.trim();
