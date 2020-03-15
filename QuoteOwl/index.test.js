@@ -9,7 +9,7 @@ const promiseMock = resolvesTo =>
 const htmlExpectation = `
     <div style='background: #F7F7F7; color: black; padding: 30px 8px; font-family: "Montserrat", "Gotham Light", helvetica'>
       <div style='margin: auto; max-width: 700px'>
-        <p style='text-align: center; line-height: 1.6; font-size: 26px; font-weight: 500; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic;'>
+        <p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic;'>
             The most basic question is not what is best, but <strong>who shall decide</strong> what is best.
           </p>
       </div>

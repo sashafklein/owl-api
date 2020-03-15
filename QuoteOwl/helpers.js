@@ -13,7 +13,7 @@ const html = quote => {
       <div style='margin: auto; max-width: 700px'>
         ${body.split("\r\n").map(
           (line, i) =>
-            `<p style='text-align: center; line-height: 1.6; font-size: 26px; font-weight: 500; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic;${
+            `<p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic;${
               i === 0 ? "" : " margin-top: -15px;"
             }'>
             ${line}
