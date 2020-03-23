@@ -50,7 +50,9 @@ module.exports = async function(context, myTimer, axios = axiosLib) {
               const quote = next.fields;
               const { author, body } = quote;
               const bodySubject = body.length < 100;
-              const subject = bodySubject ? body.replace(/\*/g, "") : author;
+              const subject = bodySubject
+                ? body.replace(/\*/g, "").replace(/\r\n/g, " ")
+                : author;
               const from = bodySubject
                 ? `${author.replace(/[\,'."\(\*\)#]/g, "")} - Quote Owl`
                 : "Quote Owl";
