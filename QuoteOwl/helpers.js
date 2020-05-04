@@ -1,12 +1,12 @@
-const makeBold = text => {
+const makeBold = (text) => {
   const regex = new RegExp("(?:\\*+)([a-zA-Z0-9 ]+)(?:\\*+)", "g");
   return text.replace(
     regex,
-    match => `<strong>${match.replace(new RegExp("\\*", "g"), "")}</strong>`
+    (match) => `<strong>${match.replace(new RegExp("\\*", "g"), "")}</strong>`
   );
 };
 
-const html = quote => {
+const html = (quote) => {
   const body = makeBold(quote.body);
   const content = `
     <div style='background: #F7F7F7; color: black; padding: 30px 8px; font-family: "Montserrat", "Gotham Light", helvetica'>
@@ -32,5 +32,5 @@ const html = quote => {
 
 module.exports = {
   html,
-  makeBold
+  makeBold,
 };
