@@ -1,3 +1,5 @@
+const htmlBeautify = require("js-beautify").html;
+
 const timerFunction = require("./index");
 const { makeBold, html } = require("./helpers");
 
@@ -24,16 +26,34 @@ const htmlExpectation2 = `
     <div style='background: #F7F7F7; color: black; padding: 30px 8px; font-family: "Montserrat", "Gotham Light", helvetica'>
       <div style='margin: auto; max-width: 700px'>
         <p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic;'>
-            God, grant me the serenity to accept the things I cannot change,
-          </p>,<p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic; margin-top: -15px;'>
-            Courage to change the things I can change,
-          </p>,<p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic; margin-top: -15px;'>
-            And wisdom to know the difference.
-          </p>
+          God, grant me the serenity to accept the things I cannot change,
+        </p>
+        <p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic; margin-top: -15px;'>
+          Courage to change the things I can change,
+        </p>
+        <p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic; margin-top: -15px;'>
+          And wisdom to know the difference.
+        </p>
       </div>
       <div>
         <p style='font-size: 22px; text-align: center; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; margin-bottom: 30px; margin-top: -4px;'>
           - Reinhold Niebuhr
+        </p>
+      </div>
+    </div>`;
+
+const htmlExpectation3 = `
+    <div style='background: #F7F7F7; color: black; padding: 30px 8px; font-family: "Montserrat", "Gotham Light", helvetica'>
+      <div style='margin: auto; max-width: 700px'>
+        <p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic;'>
+            The greatest obstacle to living is expectancy, which hangs upon tomorrow and loses today.
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; font-style: italic; margin-top: -15px;'>
+            The whole future lies in uncertainty: live immediately.
+          </p>
+      </div>
+      <div>
+        <p style='font-size: 22px; text-align: center; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; margin-bottom: 30px; margin-top: -4px;'>
+          - Seneca
         </p>
       </div>
     </div>`;
@@ -122,6 +142,14 @@ describe("Quote owl endpoint", () => {
       author: "Reinhold Niebuhr",
     };
 
-    expect(html(quote).trim()).toEqual(htmlExpectation2.trim());
+    expect(htmlBeautify(html(quote))).toEqual(htmlBeautify(htmlExpectation2));
+
+    const quote2 = {
+      body:
+        "The greatest obstacle to living is expectancy, which hangs upon tomorrow and loses today.\nThe whole future lies in uncertainty: live immediately.",
+      author: "Seneca",
+    };
+
+    expect(htmlBeautify(html(quote2))).toEqual(htmlBeautify(htmlExpectation3));
   });
 });
