@@ -1,15 +1,13 @@
 const axiosLib = require("axios");
-const { html } = require("./helpers");
+const { html, key, base } = require("./helpers");
 
 require("dotenv").config();
 
 module.exports = async function (context, myTimer, axios = axiosLib) {
   const { log } = context;
   return new Promise((resolve, reject) => {
-    const { AIRTABLE_API_KEY, AIRTABLE_APP_ID, RECIPIENTS } = process.env;
+    const { RECIPIENTS } = process.env;
     log("TIMER", myTimer);
-    const key = `?api_key=${AIRTABLE_API_KEY}`;
-    const base = `https://api.airtable.com/v0/${AIRTABLE_APP_ID}/Quotes`;
 
     const params = {
       "sort[0][field]": "times_sent",

@@ -1,7 +1,7 @@
 const htmlBeautify = require("js-beautify").html;
-
+const axios = require("axios");
 const timerFunction = require("./index");
-const { makeBold, html } = require("./helpers");
+const { makeBold, html, key, base } = require("./helpers");
 
 const context = require("../testing/defaultContext");
 
@@ -54,6 +54,49 @@ const htmlExpectation3 = `
       <div>
         <p style='font-size: 22px; text-align: center; font-weight: 400; font-family: "Montserrat", "Gotham Light", helvetica; margin-bottom: 30px; margin-top: -4px;'>
           - Seneca
+        </p>
+      </div>
+    </div>`;
+
+const htmlExpectation4 = `<div style='background: #F7F7F7; color: black; padding: 30px 8px; font-family: \"Montserrat\", \"Gotham Light\", helvetica'>
+      <div style='margin: auto; max-width: 700px'>
+        <p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic;'>
+            <strong>Tripping Over Joy</strong>
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            What is the difference
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            Between your experience of Existence
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            And that of a saint?
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            The saint knows
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            That the spiritual path
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            Is a sublime chess game with God
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            And that the Beloved
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            Has just made such a Fantastic Move
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            That the saint is now continually
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            Tripping over Joy
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            And bursting out in Laughter
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            And saying, “I Surrender!”
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            Whereas, my dear,
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            I am afraid you still think
+          </p><p style='text-align: center; line-height: 1.8; font-size: 24px; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; font-style: italic; margin-top: -15px;'>
+            You have a thousand serious moves.
+          </p>
+      </div>
+      <div>
+        <p style='font-size: 22px; text-align: center; font-weight: 400; font-family: \"Montserrat\", \"Gotham Light\", helvetica; margin-bottom: 30px; margin-top: -4px;'>
+          - Hafez
         </p>
       </div>
     </div>`;
@@ -151,5 +194,15 @@ describe("Quote owl endpoint", () => {
     };
 
     expect(htmlBeautify(html(quote2))).toEqual(htmlBeautify(htmlExpectation3));
+  });
+
+  it("html plus endpoint - it formats Hafez correctly", (done) => {
+    const hafezId = "rec6FW2tca6dnkq0u";
+    axios.get(`${base}/${hafezId}${key}`).then(({ data }) => {
+      expect(htmlBeautify(html(data.fields))).toEqual(
+        htmlBeautify(htmlExpectation4)
+      );
+      done();
+    });
   });
 });

@@ -1,3 +1,7 @@
+require("dotenv").config();
+
+const { AIRTABLE_API_KEY, AIRTABLE_APP_ID } = process.env;
+
 const makeBold = (text) => {
   const regex = new RegExp("(?:\\*+)([a-zA-Z0-9 ]+)(?:\\*+)", "g");
   return text.replace(
@@ -13,6 +17,11 @@ const html = (quote) => {
       <div style='margin: auto; max-width: 700px'>
         ${body
           .split(new RegExp("(\r|\n|(?:\\r)|(?:\\n))+", "g"))
+          .map((seg) => seg.split("\\r\\n"))
+          .reduce(
+            (flat, arr) => (arr.length > 0 ? [...flat, ...arr] : flat),
+            []
+          )
           .filter((s) => s.trim().length > 0)
           .map(
             (line, i) =>
@@ -34,7 +43,12 @@ const html = (quote) => {
   return content;
 };
 
+const base = `https://api.airtable.com/v0/${AIRTABLE_APP_ID}/Quotes`;
+const key = `?api_key=${AIRTABLE_API_KEY}`;
+
 module.exports = {
   html,
   makeBold,
+  key,
+  base,
 };
